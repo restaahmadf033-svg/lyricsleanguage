@@ -65,7 +65,7 @@ function normalizeQuiz(value: unknown) {
   })
 }
 
-app.post(['/api/analyze', '/analyze'], async (req, res) => {
+app.post(['/api/analyze', '/analyze', '/'], async (req, res) => {
   const { source, target, lyrics } = req.body ?? {}
   if (!source || !target || !lyrics?.trim()) return res.status(400).json({ error: 'Please provide languages and lyrics.' })
   if (source === target) return res.status(400).json({ error: 'Source and target language cannot be the same.' })
