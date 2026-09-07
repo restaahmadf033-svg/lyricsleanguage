@@ -1,6 +1,8 @@
 import 'dotenv/config'
 import express from 'express'
 import OpenAI from 'openai'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 const app = express()
 app.use(express.json({ limit: '200kb' }))
@@ -8,9 +10,12 @@ const port = Number(process.env.PORT || 8787)
 const apiKey = process.env.DASHSCOPE_API_KEY || process.env.BITDEER_API_KEY
 const baseURL = process.env.DASHSCOPE_BASE_URL || process.env.BITDEER_BASE_URL || 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1'
 const model = process.env.DASHSCOPE_MODEL_ID || process.env.BITDEER_MODEL_ID || 'qwen-plus'
+const serverDirectory = path.dirname(fileURLToPath(import.meta.url))
 const schema = `Return only valid JSON matching this shape: {"lyrics_analysis":[{"original":"string","literal_translation":"string","natural_translation":"string","meaning":"simple explanation","vocabulary":[{"word":"string","meaning":"string"}],"japanese_analysis":[{"japanese":"string","romaji":"string","meaning":"string","breakdown":"string"}]}],"important_vocabulary":[{"word":"string","meaning":"string","example":"string","romaji":"string"}],"language_notes":[{"title":"string","explanation":"string","example":"string"}],"quiz":[{"question":"string","options":["A. string","B. string","C. string","D. string"],"answer":"exact option string","explanation":"short explanation"}],"summary":{"vocabulary_count":0,"expression_count":0,"grammar_count":0,"particle_count":0}}`
 type NoticedWord = { word: string; meaning: string }
 type ImportantWord = { word: string; meaning: string; example: string; romaji?: string }
+
+app.use(express.static(path.join(serverDirectory, '../dist')))
 
 function createDemoAnalysis(lyrics: string, target: string) {
   const lines = lyrics.split(/\r?\n/).map((line) => line.trim()).filter(Boolean).slice(0, 12)
@@ -100,4 +105,6 @@ app.post('/api/analyze', async (req, res) => {
     res.status(500).json({ error: 'Something went wrong while analyzing the lyrics. Please try again.' })
   }
 })
+
+app.get('/{*splat}', (_req, res) => res.sendFile(path.join(serverDirectory, '../dist/index.html')))
 app.listen(port, () => console.log(`API server running on http://localhost:${port}`))
