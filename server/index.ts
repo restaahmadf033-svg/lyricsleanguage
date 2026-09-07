@@ -107,4 +107,6 @@ app.post('/api/analyze', async (req, res) => {
 })
 
 app.get('/{*splat}', (_req, res) => res.sendFile(path.join(serverDirectory, '../dist/index.html')))
-app.listen(port, () => console.log(`API server running on http://localhost:${port}`))
+export default app
+
+if (process.env.VERCEL !== '1') app.listen(port, () => console.log(`API server running on http://localhost:${port}`))
