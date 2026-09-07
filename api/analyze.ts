@@ -1,9 +1,9 @@
 import type { Request, Response } from 'express'
 import OpenAI from 'openai'
 
-const apiKey = process.env.DASHSCOPE_API_KEY || process.env.BITDEER_API_KEY
-const baseURL = process.env.DASHSCOPE_BASE_URL || process.env.BITDEER_BASE_URL || 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1'
-const model = process.env.DASHSCOPE_MODEL_ID || process.env.BITDEER_MODEL_ID || 'qwen-plus'
+const apiKey = process.env.DASHSCOPE_API_KEY || process.env.BITDEER_API_KEY || process.env.OPENAI_API_KEY
+const baseURL = process.env.DASHSCOPE_BASE_URL || process.env.BITDEER_BASE_URL || process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1'
+const model = process.env.DASHSCOPE_MODEL_ID || process.env.BITDEER_MODEL_ID || process.env.OPENAI_MODEL || 'gpt-4o-mini'
 
 export default async function analyze(request: Request, response: Response) {
   if (request.method !== 'POST') return response.status(405).json({ error: 'Method not allowed.' })

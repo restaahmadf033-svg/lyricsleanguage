@@ -7,9 +7,9 @@ import { fileURLToPath } from 'node:url'
 const app = express()
 app.use(express.json({ limit: '200kb' }))
 const port = Number(process.env.PORT || 8787)
-const apiKey = process.env.DASHSCOPE_API_KEY || process.env.BITDEER_API_KEY
-const baseURL = process.env.DASHSCOPE_BASE_URL || process.env.BITDEER_BASE_URL || 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1'
-const model = process.env.DASHSCOPE_MODEL_ID || process.env.BITDEER_MODEL_ID || 'qwen-plus'
+const apiKey = process.env.DASHSCOPE_API_KEY || process.env.BITDEER_API_KEY || process.env.OPENAI_API_KEY
+const baseURL = process.env.DASHSCOPE_BASE_URL || process.env.BITDEER_BASE_URL || process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1'
+const model = process.env.DASHSCOPE_MODEL_ID || process.env.BITDEER_MODEL_ID || process.env.OPENAI_MODEL || 'gpt-4o-mini'
 const serverDirectory = path.dirname(fileURLToPath(import.meta.url))
 const schema = `Return only valid JSON matching this shape: {"lyrics_analysis":[{"original":"string","literal_translation":"string","natural_translation":"string","meaning":"simple explanation","vocabulary":[{"word":"string","meaning":"string"}],"japanese_analysis":[{"japanese":"string","romaji":"string","meaning":"string","breakdown":"string"}]}],"important_vocabulary":[{"word":"string","meaning":"string","example":"string","romaji":"string"}],"language_notes":[{"title":"string","explanation":"string","example":"string"}],"quiz":[{"question":"string","options":["A. string","B. string","C. string","D. string"],"answer":"exact option string","explanation":"short explanation"}],"summary":{"vocabulary_count":0,"expression_count":0,"grammar_count":0,"particle_count":0}}`
 type NoticedWord = { word: string; meaning: string }
